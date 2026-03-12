@@ -1,15 +1,18 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let userData = JSON.parse(localStorage.getItem("userData")) || null;
 
-// --- Корзина ---
+// ──────────────────────────────────────────────
+// Корзина
+// ──────────────────────────────────────────────
+
 function updateCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function updateCartCount() {
   const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const cartCountEl = document.getElementById("cart-count");
-  if (cartCountEl) cartCountEl.textContent = count;
+  const el = document.getElementById("cart-count");
+  if (el) el.textContent = count;
 }
 
 function showNotification(message) {
@@ -36,29 +39,29 @@ function addToCart(product, card) {
   updateCartCount();
   showNotification(`${product.name} добавлен в корзину`);
 
+  const qtyEl = card.querySelector(".quantity");
   const removeBtn = card.querySelector(".remove-from-cart");
-  const quantityEl = card.querySelector(".quantity");
-
-  if (removeBtn) removeBtn.style.display = "inline-block";
-  if (quantityEl) {
-    quantityEl.style.display = "inline-block";
-    quantityEl.textContent = existing ? existing.quantity : 1;
+  if (qtyEl) {
+    qtyEl.textContent = existing ? existing.quantity : 1;
+    qtyEl.style.display = "inline-block";
   }
+  if (removeBtn) removeBtn.style.display = "inline-block";
 }
 
 function removeFromCart(productId, card) {
   const existing = cart.find(item => item.id === productId);
   if (existing) {
     existing.quantity--;
-    if (existing.quantity <= 0) {
-      cart = cart.filter(item => item.id !== productId);
-      const removeBtn = card.querySelector(".remove-from-cart");
-      const quantityEl = card.querySelector(".quantity");
-      if (removeBtn) removeBtn.style.display = "none";
-      if (quantityEl) quantityEl.style.display = "none";
+    const qtyEl = card.querySelector(".quantity");
+    const removeBtn = card.querySelector(".remove-from-cart");
+
+    if (existing.quantity > 0) {
+      if (qtyEl) qtyEl.textContent = existing.quantity;
     } else {
-      const quantityEl = card.querySelector(".quantity");
-      if (quantityEl) quantityEl.textContent = existing.quantity;
+      cart = cart.filter(item => item.id !== productId);
+      if (qtyEl) qtyEl.style.display = "none";
+      if (removeBtn) removeBtn.style.display = "none";
+      if (qtyEl) qtyEl.textContent = "0";
     }
     updateCart();
     updateCartCount();
@@ -66,36 +69,36 @@ function removeFromCart(productId, card) {
   }
 }
 
-// Навешиваем обработчики на карточки товаров
+// Навешивание обработчиков на товары
 document.querySelectorAll(".product-card").forEach(card => {
   const product = {
     id: card.dataset.id,
     name: card.dataset.name,
     price: parseFloat(card.dataset.price),
-    image: card.querySelector("img").getAttribute("src")
+    image: card.querySelector("img").src
   };
 
   const addBtn = card.querySelector(".add-to-cart");
   const removeBtn = card.querySelector(".remove-from-cart");
-  const quantityEl = card.querySelector(".quantity");
+  const qtyEl = card.querySelector(".quantity");
 
   const existing = cart.find(item => item.id === product.id);
   if (existing) {
-    if (removeBtn) removeBtn.style.display = "inline-block";
-    if (quantityEl) {
-      quantityEl.style.display = "inline-block";
-      quantityEl.textContent = existing.quantity;
+    if (qtyEl) {
+      qtyEl.textContent = existing.quantity;
+      qtyEl.style.display = "inline-block";
     }
+    if (removeBtn) removeBtn.style.display = "inline-block";
   } else {
+    if (qtyEl) qtyEl.style.display = "none";
     if (removeBtn) removeBtn.style.display = "none";
-    if (quantityEl) quantityEl.style.display = "none";
   }
 
   if (addBtn) addBtn.addEventListener("click", () => addToCart(product, card));
   if (removeBtn) removeBtn.addEventListener("click", () => removeFromCart(product.id, card));
 });
 
-// Кнопка перехода в корзину
+// Кнопка корзины → переход на cart.html
 const cartBtn = document.querySelector(".cart-btn");
 if (cartBtn) {
   cartBtn.addEventListener("click", () => {
@@ -103,187 +106,155 @@ if (cartBtn) {
   });
 }
 
-// Отображение корзины
-// ... весь код до renderCartPage() оставь без изменений ...
+// ──────────────────────────────────────────────
+// Вход / регистрация
+// ──────────────────────────────────────────────
 
-// Отображение корзины + автоподстановка + обработка заказа
-function renderCartPage() {
-  const container = document.getElementById("cart-items");
-  const totalEl   = document.getElementById("cart-total");
-  const orderForm = document.getElementById("order-form");
-  const submitBtn = document.getElementById("submit-order-btn");
+const loginBtn = document.querySelector(".login-btn");
+const loginText = document.querySelector(".login-text");
 
-  if (!container) return;
-
-  if (cart.length === 0) {
-    container.innerHTML = "<p class=\"empty-cart\">Корзина пуста</p>";
-    if (totalEl) totalEl.innerHTML = "";
-    if (orderForm) orderForm.style.display = "none";
-    return;
-  }
-
-  // показываем форму, если корзина не пуста
-  if (orderForm) orderForm.style.display = "block";
-
-  let total = 0;
-  container.innerHTML = cart.map(item => {
-    const itemTotal = item.quantity * item.price;
-    total += itemTotal;
-    return `
-      <div class="cart-item">
-        <img src="${item.image}" alt="${item.name}">
-        <div class="cart-item-info">
-          <h4>${item.name}</h4>
-          <div class="cart-item-details">
-            ${item.price} ₽ × ${item.quantity} шт
-          </div>
-        </div>
-        <div class="cart-item-total">${itemTotal} ₽</div>
-      </div>
-    `;
-  }).join("");
-
-  if (totalEl) {
-    totalEl.innerHTML = `<strong>Итого: ${total} ₽</strong>`;
-  }
-
-  // автоподстановка данных пользователя
-  if (userData) {
-    const nameEl    = document.getElementById("username");
-    const phoneEl   = document.getElementById("phone");
-    const addressEl = document.getElementById("address");
-
-    if (nameEl)    nameEl.value    = userData.username || "";
-    if (phoneEl)   phoneEl.value   = userData.phone   || "";
-    if (addressEl) addressEl.value = userData.address || "";
-  }
-
-  // обработка отправки заказа
-  if (orderForm) {
-    // снимаем старые обработчики, чтобы не дублировались
-    orderForm.removeEventListener("submit", handleOrderSubmit);
-    orderForm.addEventListener("submit", handleOrderSubmit);
-  }
-
-  function handleOrderSubmit(e) {
-    e.preventDefault();
-
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Оформляем...";
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    if (userData) {
+      window.location.href = "account.html";
+    } else {
+      const modal = document.getElementById("login-modal");
+      if (modal) modal.style.display = "block";
     }
-
-    const order = {
-      user: {
-        name:    document.getElementById("username")?.value || "",
-        phone:   document.getElementById("phone")?.value   || "",
-        address: document.getElementById("address")?.value || "",
-        comment: document.getElementById("comment")?.value || ""
-      },
-      items: cart,
-      timestamp: new Date().toISOString()
-    };
-
-    console.log("Заказ отправлен:", order);
-    // здесь в будущем можно отправить на сервер: fetch('/api/order', ...)
-
-    showNotification("Заказ успешно оформлен! Спасибо за покупку!");
-
-    // очищаем корзину
-    cart = [];
-    updateCart();
-    updateCartCount();
-    renderCartPage();
-
-    // возвращаем кнопку в нормальное состояние (на случай, если пользователь останется на странице)
-    setTimeout(() => {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Подтвердить заказ";
-      }
-    }, 2000);
-  }
+  });
 }
 
-// --- Вход / регистрация ---
 const loginForm = document.getElementById("login-form");
-
 if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault(); // ← это обязательно, чтобы страница не перезагружалась
+  loginForm.addEventListener("submit", e => {
+    e.preventDefault();
 
-    // Явно берём значения по id
-    const usernameInput = document.getElementById("username");
-    const phoneInput    = document.getElementById("phone");
-    const addressInput  = document.getElementById("address");
-    const passwordInput = document.getElementById("password");
-
-    // Проверяем, что все поля найдены и заполнены
-    if (!usernameInput || !phoneInput || !addressInput || !passwordInput) {
-      showNotification("Ошибка: не найдены поля формы");
-      return;
-    }
-
-    const username = usernameInput.value.trim();
-    const phone    = phoneInput.value.trim();
-    const address  = addressInput.value.trim();
-    const password = passwordInput.value.trim();
+    const username = document.getElementById("username")?.value.trim();
+    const phone    = document.getElementById("phone")?.value.trim();
+    const address  = document.getElementById("address")?.value.trim();
+    const password = document.getElementById("password")?.value.trim();
 
     if (!username || !phone || !address || !password) {
-      showNotification("Заполните все поля!");
+      showNotification("Заполните все поля");
       return;
     }
 
-    // Сохраняем
     userData = { username, phone, address, password };
     localStorage.setItem("userData", JSON.stringify(userData));
 
     showNotification(`Добро пожаловать, ${username}!`);
 
-    // Закрываем модалку
-    const loginModal = document.getElementById("login-modal");
-    if (loginModal) loginModal.style.display = "none";
+    const modal = document.getElementById("login-modal");
+    if (modal) modal.style.display = "none";
 
-    // Меняем текст кнопки
-    const loginText = document.querySelector(".login-text");
     if (loginText) loginText.textContent = username;
 
-    // (опционально) очищаем форму
     loginForm.reset();
   });
 }
 
-// --- Обработчик кнопки профиля / входа ---
-const loginBtn = document.querySelector(".login-btn");
-if (loginBtn) {
-  loginBtn.addEventListener("click", () => {
-    if (userData) {
-      // уже залогинен → переходим в личный кабинет
-      window.location.href = "account.html";
-    } else {
-      // не залогинен → показываем модалку (только на index.html)
-      const loginModal = document.getElementById("login-modal");
-      if (loginModal) {
-        loginModal.style.display = "block";
-      } else {
-        // если модалки нет (например на cart.html), можно показать уведомление или ничего
-        showNotification("Пожалуйста, войдите через главную страницу");
-      }
-    }
+// ──────────────────────────────────────────────
+// Чат с Firebase
+// ──────────────────────────────────────────────
+
+function getUsername() {
+  const u = JSON.parse(localStorage.getItem("userData")) || {};
+  return u.username || "Аноним";
+}
+
+function initChat() {
+  if (typeof firebase === "undefined") {
+    console.error("Firebase SDK не загружен");
+    return;
+  }
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-2adAi4ofdKoMdvw2DESVRv5qoEhkim4",
+    authDomain: "velosiped-87468.firebaseapp.com",
+    databaseURL: "https://velosiped-87468-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "velosiped-87468",
+    storageBucket: "velosiped-87468.firebasestorage.app",
+    messagingSenderId: "462857607556",
+    appId: "1:462857607556:web:07e28b471beb9154baa5d1"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const messagesRef = db.ref("public-chat");
+
+  const container = document.getElementById("chat-messages");
+  if (!container) {
+    console.warn("Элемент #chat-messages не найден");
+    return;
+  }
+
+  messagesRef.on("child_added", snapshot => {
+    const msg = snapshot.val();
+    const div = document.createElement("div");
+    div.className = "chat-message";
+    if (msg.username === getUsername()) div.classList.add("own");
+    div.innerHTML = `<strong>${msg.username}:</strong> ${msg.text}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
   });
 }
 
-// --- Инициализация ---
+// ──────────────────────────────────────────────
+// Инициализация страницы
+// ──────────────────────────────────────────────
+
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 
-  if (userData) {
-    const loginText = document.querySelector(".login-text");
-    if (loginText) loginText.textContent = userData.username || "Профиль";
+  if (userData && loginText) {
+    loginText.textContent = userData.username || "Профиль";
   }
 
-  // рендерим корзину только если мы на странице cart.html
-  if (document.getElementById("cart-items")) {
-    renderCartPage();
+  // Чат — навешиваем события и инициализируем
+  const openBtn   = document.getElementById("open-chat");
+  const modal     = document.getElementById("chat-modal");
+  const closeBtn  = document.getElementById("close-chat");
+  const sendBtn   = document.getElementById("send-message");
+  const input     = document.getElementById("chat-input");
+
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => {
+      modal.style.display = "block";
+      if (input) input.focus();
+    });
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+  }
+
+  if (sendBtn && input) {
+    sendBtn.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messagesRef = firebase.database().ref("public-chat");
+      messagesRef.push({
+        username: getUsername(),
+        text,
+        timestamp: Date.now()
+      });
+
+      input.value = "";
+    });
+
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+  }
+
+  // Запуск чата, если элементы есть
+  if (document.getElementById("chat-messages")) {
+    initChat();
   }
 });
