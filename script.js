@@ -270,9 +270,11 @@ let messagesRef;
 
 function initChat() {
   if (typeof firebase === "undefined") {
-    console.error("Firebase SDK не загружен");
+    console.error("Firebase SDK НЕ ЗАГРУЗИЛСЯ — проверь <script> теги в HTML");
     return;
   }
+
+  console.log("Попытка подключения к Firebase...");
 
   const firebaseConfig = {
     apiKey: "AIzaSyD-2adAi4ofdKoMdvw2DESVRv5qoEhkim4",
@@ -284,22 +286,34 @@ function initChat() {
     appId: "1:462857607556:web:07e28b471beb9154baa5d1"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  messagesRef = db.ref("public-chat");
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    messagesRef = db.ref("public-chat");
 
-  const container = document.getElementById("chat-messages");
-  if (!container) return;
+    console.log("УСПЕШНО подключились к Firebase! Слушаем public-chat");
 
-  messagesRef.on("child_added", (snapshot) => {
-    const msg = snapshot.val();
-    const div = document.createElement("div");
-    div.className = "chat-message";
-    if (msg.username === getUsername()) div.classList.add("own");
-    div.innerHTML = `<strong>${msg.username}:</strong> ${msg.text}`;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  });
+    messagesRef.on("child_added", (snapshot) => {
+      console.log("Получено новое сообщение от сервера:", snapshot.val());
+      const msg = snapshot.val();
+      const container = document.getElementById("chat-messages");
+      if (container) {
+        const div = document.createElement("div");
+        div.className = "chat-message";
+        if (msg.username === getUsername()) div.classList.add("own");
+        div.innerHTML = `<strong>${msg.username}:</strong> ${msg.text}`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+      }
+    });
+
+    // Тестовое сообщение при подключении (чтобы проверить)
+    messagesRef.once("value", (snap) => {
+      console.log("Текущая база сообщений:", snap.val() || "пусто");
+    });
+  } catch (error) {
+    console.error("Ошибка подключения к Firebase:", error);
+  }
 }
 
 function getUsername() {
