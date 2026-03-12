@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — Быстрая Доставка Донецк</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css"> <!-- если есть отдельный cart.css, оставь -->
+</head>
+<body>
+
+  <!-- Шапка (та же, что на главной, но без модалки) -->
+  <div class="top-bar">
+    <div class="top-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="Логотип">
+      </a>
+
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <img src="search-icon.svg" class="search-icon" alt="Поиск" />
+          <input type="search" placeholder="Искать в Велосипеде" />
+        </div>
+      </div>
+
+      <div class="right-menu">
+        <button class="login-btn" title="Профиль">
+          <img src="user-icon.svg" alt="Профиль" class="login-icon">
+          <span class="login-text">Профиль</span>
+        </button>
+
+        <button class="cart-btn" title="Корзина">
+          🛒 <span id="cart-count">0</span>
+        </button>
+
+        <button class="menu-btn" title="Меню">
+          <img src="menu-icon.svg" alt="Меню" class="btn-icon">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="cart-layout">
+    <!-- Товары слева -->
+    <section id="cart-section">
+      <h1>Корзина</h1>
+      <div id="cart-items" class="cart-list"></div>
+      <div id="cart-total" class="cart-total"></div>
+    </section>
+
+    <!-- Оформление справа -->
+    <aside id="checkout">
+      <h2>Оформление заказа</h2>
+      <form id="order-form">
+        <label for="username">Имя</label>
+        <input type="text" id="username" required>
+
+        <label for="phone">Телефон</label>
+        <input type="tel" id="phone" required>
+
+        <label for="address">Адрес доставки</label>
+        <input type="text" id="address" required>
+
+        <label for="comment">Комментарий</label>
+        <textarea id="comment"></textarea>
+
+        <button type="submit" id="submit-order-btn">Подтвердить заказ</button>
+      </form>
+    </aside>
+  </main>
+
+  <footer>
+    © 2026 Быстрая Доставка Донецк | Тестовый режим
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

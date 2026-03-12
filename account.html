@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Аккаунт</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Мой аккаунт</h1>
+  <p>Вы вошли как <strong id="user-name"></strong></p>
+  <button id="delete-account">Удалить аккаунт</button>
+
+  <script>
+    let userData = JSON.parse(localStorage.getItem("userData")) || null;
+    if (userData) {
+      document.getElementById("user-name").textContent = userData.username;
+    }
+
+    document.getElementById("delete-account").addEventListener("click", () => {
+      localStorage.removeItem("userData");
+      alert("Аккаунт удалён");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

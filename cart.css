@@ -1,0 +1,127 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f7fa;
+  color: #333;
+}
+
+header {
+  background: #0077cc;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+.cart-layout {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Левая часть — корзина */
+#cart-section {
+  flex: 2;
+}
+
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.cart-item img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-right: 1rem;
+  border-radius: 6px;
+  background: #f0f0f0;
+}
+
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item h4 {
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+}
+
+.cart-item-details {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.cart-item-price {
+  font-weight: bold;
+  color: #0077cc;
+}
+
+.cart-item-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #222;
+  margin-left: 1rem;
+}
+
+.cart-total {
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Правая часть — оформление заказа */
+#checkout {
+  flex: 1;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  align-self: flex-start;
+}
+
+#checkout h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+#order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#order-form input,
+#order-form textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#order-form button {
+  padding: 0.8rem;
+  background: #0077cc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#order-form button:hover {
+  background: #005fa3;
+}

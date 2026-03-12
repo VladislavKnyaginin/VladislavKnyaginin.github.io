@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Быстрая Доставка Донецк — продукты за 30–60 минут</title>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Шапка -->
+  <div class="top-bar">
+    <div class="top-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="Логотип">
+      </a>
+
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <img src="search-icon.svg" class="search-icon" alt="Поиск" />
+          <input type="search" placeholder="Искать в Велосипеде" />
+        </div>
+      </div>
+
+      <div class="right-menu">
+        <button class="login-btn" title="Войти">
+          <img src="user-icon.svg" alt="Профиль" class="login-icon">
+          <span class="login-text">Войти</span>
+        </button>
+
+        <button class="cart-btn" title="Корзина">
+          🛒 <span id="cart-count">0</span>
+        </button>
+
+        <button class="menu-btn" title="Меню">
+          <img src="menu-icon.svg" alt="Меню" class="btn-icon">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно регистрации/входа (перемещено сюда) -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2>Регистрация / Вход</h2>
+      <form id="login-form">
+        <label for="username">Имя</label>
+        <input type="text" id="username" required placeholder="Введите имя">
+
+        <label for="phone">Телефон</label>
+        <input type="tel" id="phone" required placeholder="+7 (___) ___-__-__">
+
+        <label for="address">Адрес</label>
+        <input type="text" id="address" required placeholder="Введите адрес доставки">
+
+        <label for="password">Пароль</label>
+        <input type="password" id="password" required placeholder="Введите пароль">
+
+        <button type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Герой-секция -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Быстрая доставка в Донецке</h1>
+        <p class="hero-subtitle">
+          Продукты, вода, снеки, бытовая химия, ВООБЩЕ ВСЁ — <strong>за 30–60 минут</strong><br>
+          Свежайшее из магазинов прямо к вашей двери
+        </p>
+
+        <div class="hero-advantages">
+          <div class="advantage-item">
+            <span class="advantage-icon">⚡</span>
+            <span>до 60 мин</span>
+          </div>
+          <div class="advantage-item">
+            <span class="advantage-icon">₽</span>
+            <span>от 100 ₽</span>
+          </div>
+          <div class="advantage-item">
+            <span class="advantage-icon">✓</span>
+            <span>Оплата при получении</span>
+          </div>
+        </div>
+
+        <a href="#products" class="hero-cta">Заказать сейчас →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <section id="about" class="about">
+      <h2>Почему выбирают нас?</h2>
+      <div class="about-cards">
+        <div class="about-card">
+          <h3>Быстрее</h3>
+          <p>Доставка за 15–60 минут — быстрее всех в Донецке.</p>
+        </div>
+        <div class="about-card">
+          <h3>Дешевле</h3>
+          <p>Минимальная стоимость доставки от 100₽ — выгоднее других.</p>
+        </div>
+        <div class="about-card">
+          <h3>Качественнее</h3>
+          <p>Свежие продукты и проверенные магазины — лучший выбор.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="products">
+      <h2>Каталог и самые популярные товары</h2>
+      <div class="products">
+
+        <div class="product-card" data-id="1" data-name="Молоко 3.2% 1 л" data-price="85">
+          <img src="products/milk.jpg" alt="Молоко">
+          <div class="product-info">
+            <h3>Молоко 3.2% 1 л</h3>
+            <div class="product-footer">
+              <div class="price">85 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="2" data-name="Хлебушек" data-price="53">
+          <img src="products/bread.png" alt="Хлеб белый">
+          <div class="product-info">
+            <h3>Хлебушек</h3>
+            <div class="product-footer">
+              <div class="price">53 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="3" data-name="Яйца куриные С1 10 шт" data-price="120">
+          <img src="products/eggs.jpg" alt="Яйца">
+          <div class="product-info">
+            <h3>Яйца куриные С1 10 шт</h3>
+            <div class="product-footer">
+              <div class="price">120 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="4" data-name="Картофель молодой 1 кг" data-price="60">
+          <img src="products/potato.jpg" alt="Картофель">
+          <div class="product-info">
+            <h3>Картофель молодой 1 кг</h3>
+            <div class="product-footer">
+              <div class="price">60 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="5" data-name="Жидкое мыло 500 мл" data-price="150">
+          <img src="products/soap.jpg" alt="Жидкое мыло">
+          <div class="product-info">
+            <h3>Жидкое мыло 500 мл</h3>
+            <div class="product-footer">
+              <div class="price">150 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="6" data-name="Ламба" data-price="35000000">
+          <img src="products/lamborghini.jpg" alt="Lamborghini">
+          <div class="product-info">
+            <h3>Ламба</h3>
+            <div class="product-footer">
+              <div class="price">35 000 000 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="7" data-name="Газировка 1.5 л" data-price="95">
+          <img src="products/soda.jpg" alt="Газировка">
+          <div class="product-info">
+            <h3>Газировка 1.5 л</h3>
+            <div class="product-footer">
+              <div class="price">95 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="8" data-name="Пачка бумаги 100000 листов" data-price="5000">
+          <img src="products/paper.jpg" alt="Пачка бумаги">
+          <div class="product-info">
+            <h3>Пачка бумаги 100000 листов</h3>
+            <div class="product-footer">
+              <div class="price">5000 ₽</div>
+              <div class="cart-controls">
+                <button class="remove-from-cart">–</button>
+                <span class="quantity">0</span>
+                <button class="add-to-cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    © 2026 Быстрая Доставка Донецк | Тестовый режим | Донецк
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
