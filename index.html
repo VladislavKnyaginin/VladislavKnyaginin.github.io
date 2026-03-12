@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Быстрая Доставка Донецк — продукты за 30–60 минут</title>
-  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -40,7 +39,7 @@
     </div>
   </div>
 
-  <!-- Модальное окно регистрации/входа (перемещено сюда) -->
+  <!-- Модальное окно регистрации/входа -->
   <div id="login-modal" class="modal">
     <div class="modal-content">
       <span class="close-btn">×</span>
@@ -94,7 +93,6 @@
   </section>
 
   <div class="container">
-
     <section id="about" class="about">
       <h2>Почему выбирают нас?</h2>
       <div class="about-cards">
@@ -239,12 +237,33 @@
 
       </div>
     </section>
-
   </div>
 
   <footer>
     © 2026 Быстрая Доставка Донецк | Тестовый режим | Донецк
   </footer>
+
+  <!-- Плавающая кнопка чата -->
+  <button id="open-chat" class="chat-float-btn">💬</button>
+
+  <!-- Модальное окно чата -->
+  <div id="chat-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="width:380px; height:520px; display:flex; flex-direction:column; padding:20px; box-sizing:border-box;">
+      <span id="close-chat" class="close-btn" style="align-self:flex-end; font-size:28px; cursor:pointer;">×</span>
+      <h3 style="margin:0 0 15px 0; text-align:center;">Чат поддержки</h3>
+      
+      <div id="chat-messages" style="flex:1; overflow-y:auto; padding:10px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; margin-bottom:10px;"></div>
+      
+      <div style="display:flex; gap:8px;">
+        <input id="chat-input" type="text" placeholder="Напишите сообщение..." style="flex:1; padding:12px; border:1px solid #ccc; border-radius:6px;">
+        <button id="send-message" style="padding:0 20px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 
   <script src="script.js"></script>
 </body>
