@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Товар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="product.css">
+</head>
+<body>
+
+<a href="index.html" class="back-btn">← Назад</a>
+
+<div class="container">
+  
+  <div class="product-image">
+    <img id="product-image" src="">
+  </div>
+
+  <div class="product-info">
+    <h1 id="product-title" class="product-title"></h1>
+    <div id="product-price" class="product-price"></div>
+
+    <div id="product-description" class="product-description"></div>
+
+    <div class="buy-block">
+      <div class="quantity">
+        <button id="minus">−</button>
+        <span id="count">1</span>
+        <button id="plus">+</button>
+      </div>
+
+      <button class="add-to-cart">В корзину</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+
+  const products = {
+    1: {
+      name: "Молоко 3.2% 1 л",
+      price: "85 ₽",
+      image: "products/milk.jpg",
+      description: "Свежее молоко 3.2%. Отлично подходит для кофе, каш и выпечки."
+    },
+    2: {
+      name: "Хлебушек",
+      price: "53 ₽",
+      image: "products/bread.png",
+      description: "Свежий мягкий хлеб. Только из печи."
+    },
+    3: {
+      name: "Яйца куриные С1",
+      price: "120 ₽",
+      image: "products/eggs.jpg",
+      description: "10 свежих яиц категории С1."
+    },
+    4: {
+      name: "Картофель молодой",
+      price: "60 ₽",
+      image: "products/potato.jpg",
+      description: "Молодой картофель, идеально для жарки и варки."
+    },
+    5: {
+      name: "Жидкое мыло",
+      price: "150 ₽",
+      image: "products/soap.jpg",
+      description: "Антибактериальное жидкое мыло 500 мл."
+    },
+    6: {
+      name: "Ламба",
+      price: "35 000 000 ₽",
+      image: "products/lamborghini.jpg",
+      description: "Ну а вдруг 😎"
+    },
+    7: {
+      name: "Газировка 1.5 л",
+      price: "95 ₽",
+      image: "products/soda.jpg",
+      description: "Освежающий напиток."
+    },
+    8: {
+      name: "Пачка бумаги",
+      price: "5000 ₽",
+      image: "products/paper.jpg",
+      description: "100000 листов. На всю жизнь хватит."
+    }
+  };
+
+  const product = products[productId];
+
+  if (product) {
+    document.getElementById('product-title').textContent = product.name;
+    document.getElementById('product-price').textContent = product.price;
+    document.getElementById('product-image').src = product.image;
+    document.getElementById('product-description').textContent = product.description;
+  }
+
+  // Логика количества
+  let count = 1;
+
+  document.getElementById('plus').onclick = () => {
+    count++;
+    document.getElementById('count').textContent = count;
+  };
+
+  document.getElementById('minus').onclick = () => {
+    if (count > 1) count--;
+    document.getElementById('count').textContent = count;
+  };
+
+</script>
+
+</body>
+</html>

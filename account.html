@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой аккаунт</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ───────── Стили ───────── */
+    .account-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .profile-card {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 1rem auto;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.avatar-container:hover img {
+  filter: brightness(70%);
+}
+    .profile-info {
+      flex: 1;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.25s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #28a745;
+      box-shadow: 0 0 0 3px rgba(40,167,69,0.15);
+    }
+
+    .btn-primary {
+      background: #28a745;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 2rem;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .orders-table th,
+    .orders-table td {
+      border: 1px solid #ddd;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .orders-table th {
+      background: #28a745;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .orders-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .orders-table tr:hover {
+      background: #e8f5e9;
+    }
+
+    /* Настройка ширины столбцов истории заказов */
+.orders-table th:nth-child(1), /* № заказа */
+.orders-table td:nth-child(1) {
+  width: 80px; /* уменьшили */
+}
+
+.orders-table th:nth-child(3), /* Сумма */
+.orders-table td:nth-child(3) {
+  width: 150px; /* увеличили */
+}
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+
+    .notification.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container account-container">
+    <h1>Мой аккаунт</h1>
+
+    <!-- Аватар и редактирование профиля -->
+    <div class="profile-card">
+      <!-- Аватарка -->
+<div class="avatar-container">
+  <img id="avatar" src="default-avatar.png" alt="Аватар пользователя">
+  <input type="file" id="avatar-input" accept="image/*" style="display:none;">
+</div>
+      <div class="profile-info">
+        <div class="form-group">
+          <label>Имя</label>
+          <input type="text" id="username">
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input type="text" id="phone">
+        </div>
+        <div class="form-group">
+          <label>Адрес</label>
+          <input type="text" id="address">
+        </div>
+        <button id="save-profile" class="btn-primary">Сохранить изменения</button>
+      </div>
+    </div>
+
+    <!-- История заказов -->
+    <section>
+      <h2>История заказов</h2>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>№ заказа</th>
+            <th>Дата</th>
+            <th>Сумма</th>
+            <th>Товары</th>
+            <th>Комментарий</th>
+          </tr>
+        </thead>
+        <tbody id="orders-body"></tbody>
+      </table>
+    </section>
+
+    <button id="delete-account" class="btn-danger">Удалить аккаунт</button>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  let userData = JSON.parse(localStorage.getItem("userData")) || null;
+
+  if (!userData) {
+    alert("Пожалуйста, войдите в аккаунт");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Элементы страницы
+  const usernameInput = document.getElementById("username");
+  const phoneInput = document.getElementById("phone");
+  const addressInput = document.getElementById("address");
+  const saveBtn = document.getElementById("save-profile");
+  const deleteBtn = document.getElementById("delete-account");
+  const ordersBody = document.getElementById("orders-body");
+  const avatarImg = document.getElementById("avatar");
+  const avatarInput = document.getElementById("avatar-input");
+
+  // Инициализация формы
+  usernameInput.value = userData.username || "";
+  phoneInput.value = userData.phone || "";
+  addressInput.value = userData.address || "";
+  if(userData.avatar){
+    avatarImg.src = userData.avatar;
+  }
+
+  // —————————————————————
+  // Аватар
+  // —————————————————————
+  avatarImg.addEventListener("click", () => avatarInput.click());
+
+  avatarImg.addEventListener("mouseenter", () => {
+    avatarImg.style.filter = "brightness(85%)";
+    avatarImg.style.cursor = "pointer";
+  });
+  avatarImg.addEventListener("mouseleave", () => {
+    avatarImg.style.filter = "brightness(100%)";
+  });
+
+  avatarInput.addEventListener("change", () => {
+    const file = avatarInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      avatarImg.src = e.target.result;
+      userData.avatar = e.target.result;
+      localStorage.setItem("userData", JSON.stringify(userData));
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // —————————————————————
+  // Сохранение профиля
+  // —————————————————————
+  saveBtn.addEventListener("click", async () => {
+    const username = usernameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const address = addressInput.value.trim();
+
+    if(!username || !phone || !address){
+      alert("Пожалуйста, заполните все поля");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:3000/update-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userData.id,
+          username,
+          phone,
+          address
+        })
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
+      }
+
+      const updatedUser = await res.json();
+      userData = {...userData, ...updatedUser};
+      localStorage.setItem("userData", JSON.stringify(userData));
+      alert("Профиль обновлён");
+
+    } catch (err) {
+      if(err.message.includes("Телефон уже существует")){
+        alert("На этот номер уже зарегистрирован другой пользователь!");
+      } else {
+        alert("Ошибка: " + err.message);
+      }
+    }
+  });
+
+  // —————————————————————
+  // Загрузка заказов
+  // —————————————————————
+  async function loadOrders() {
+  try {
+    const res = await fetch("http://localhost:3000/orders");
+    if(!res.ok) throw new Error(await res.text());
+    let orders = await res.json();
+
+    orders = orders.filter(o => o.user_id === userData.id).sort((a,b)=>b.id-a.id);
+
+    ordersBody.innerHTML = "";
+    orders.forEach(o => {
+      let itemsArray;
+      if (typeof o.items === "string") {
+        itemsArray = JSON.parse(o.items);
+      } else {
+        itemsArray = o.items;
+      }
+
+      const items = itemsArray.map(i => i.name + " x" + i.quantity).join(", ");
+
+      ordersBody.innerHTML += `
+  <tr>
+    <td style="width: 60px;">${o.id}</td>
+    <td>${new Date(o.created_at).toLocaleString()}</td>
+    <td style="width: 150px;">${o.total_price} ₽</td>
+    <td>${items}</td>
+    <td>${o.comment || ""}</td>
+  </tr>
+`;
+    });
+  } catch (err) {
+    console.error("Ошибка загрузки заказов:", err);
+    ordersBody.innerHTML = `<tr><td colspan="4">Не удалось загрузить заказы</td></tr>`;
+  }
+}
+
+  loadOrders();
+
+  // —————————————————————
+  // Удаление аккаунта
+  // —————————————————————
+  deleteBtn.addEventListener("click", () => {
+    if(confirm("Вы точно хотите удалить аккаунт?")) {
+      localStorage.removeItem("userData");
+      alert("Аккаунт удалён");
+      window.location.href = "index.html";
+    }
+  });
+});
+</script>
+</body>
+</html>
